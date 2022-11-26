@@ -1,39 +1,31 @@
-import { FunctionComponent } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
-import { Grid, Card, Text, Button } from '@nextui-org/react'
+import { Grid } from '@nextui-org/react'
+import MenuButton from "../components/MenuButton"
+import Modal from "../components/Modal"
 import Background from '../components/Background'
 
-const SmertButton: FunctionComponent<{ text: string }> = ({ text }) => {
-  return (
-    <Button
-      // light
-      css={{
-        h: '$24',
-        $$cardColor: '$colors$secondary'
-      }}
-    >
-      <Text h6 size={15} color='white' css={{ mt: 0, textAlign: 'center' }}>
-        {text}
-      </Text>
-    </Button>
-  )
-}
-
 export default function App() {
+
+  const [visibleModal, setVisibleModal] = useState(false)
+  const handlerModal = () => setVisibleModal(true)
+  const closeHandlerModal = () => setVisibleModal(false)  
+  
   return (
     <>
       <Grid.Container css={{ mt: '$18' }} justify='center'>
-        <Image alt='' src='/smert-logo.png' width={230} height={105} />
+        <Image alt='smert logo' src='/smert-logo.png' width={230} height={105} />
       </Grid.Container>
       <Grid.Container css={{ mt: '$18' }} justify='space-around'>
         <Grid css={{ mt: '$12' }} justify='center' xs={12} sm={4} md={3}>
-          <SmertButton text='Soy Bombero' />
+          <MenuButton text='Soy Bombero' onPress={handlerModal} />
         </Grid>
         <Grid css={{ mt: '$12' }} justify='center' xs={12} sm={4} md={3}>
-          <SmertButton text='Conoce más' />
+          <MenuButton text='Conoce más' onPress={()=>{}}/>
         </Grid>
       </Grid.Container>
       <Background />
+      <Modal open={visibleModal} onClose={closeHandlerModal}/>
     </>
   )
 }
