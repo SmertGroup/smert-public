@@ -1,21 +1,17 @@
-import { Table as NextUITable, Text } from "@nextui-org/react";
-import { FunctionComponent, FC } from "react";
+import { Table as NextUITable, Text } from '@nextui-org/react'
+import { FC } from 'react'
 
 interface ITableProps {
-  title?: string;
-  description?: string;
+  title?: string
+  description?: string
 }
-const Table: FunctionComponent<ITableProps> = ({ title, description }) => {
-  const Cell:FunctionComponent  = (props) : JSX.Element => (
-    <NextUITable.Cell css={{ borderBottom: "1px solid black" }} {...props}>
-      {props.children}
-    </NextUITable.Cell>
-  );
+const Table: FC<ITableProps> = ({ title, description }) => {
+  const cellCss = { borderBottom: '1px solid black' }
   return (
     <NextUITable
-      aria-label="Example table with static content"
+      aria-label='Example table with static content'
       css={{
-        backgroundColor: "white",
+        backgroundColor: 'white'
       }}
       bordered={true}
     >
@@ -24,21 +20,21 @@ const Table: FunctionComponent<ITableProps> = ({ title, description }) => {
         <NextUITable.Column>.</NextUITable.Column>
       </NextUITable.Header>
       <NextUITable.Body>
-        <NextUITable.Row key="2">
-          <NextUITable.Cell>
-            <Text weight="bold">CFDSFSFD</Text>
+        <NextUITable.Row key='2'>
+          <NextUITable.Cell css={cellCss}>
+            <Text weight='bold'>CFDSFSFD</Text>
           </NextUITable.Cell>
-          <NextUITable.Cell>Paused</NextUITable.Cell>
+          <NextUITable.Cell css={cellCss}>Paused</NextUITable.Cell>
         </NextUITable.Row>
-        <NextUITable.Row key="3">
+        <NextUITable.Row key='3'>
           <NextUITable.Cell>
-            <Text weight="bold">CFDSFSFD</Text>
+            <Text weight='bold'>CFDSFSFD</Text>
           </NextUITable.Cell>
           <NextUITable.Cell>Active</NextUITable.Cell>
         </NextUITable.Row>
       </NextUITable.Body>
     </NextUITable>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table
