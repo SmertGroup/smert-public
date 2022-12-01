@@ -17,7 +17,6 @@ function Background() {
       autoPlay
       muted
       loop
-      poster='polina.jpg'
       id='bgvid'
     >
       <source src='background.mp4' type='video/mp4' />
