@@ -1,13 +1,11 @@
-import axios from "axios";
+import { api } from '../constants';
 import { IStructureData } from "../interfaces";
 
 
-
-
-export const getStructureData = async () => {
+export const getStructureData = async (structureId:string) => {
   try {
-    const { data, status } = await axios.get<IStructureData>(
-      'https://638517da3fa7acb14f098b3d.mockapi.io/api/v1/edificio',
+    const { data, status } = await api.get<IStructureData>(
+      `/structure/${structureId}`,
       {
         headers: {
           Accept: 'application/json',

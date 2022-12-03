@@ -23,6 +23,11 @@ export interface IStructureData {
   opcionRedInerte: string,
 }
 
+export interface IAuthBody {
+  email: string;
+  structureId: string;
+}
+
 interface ICommune {
   name: string;
 }
