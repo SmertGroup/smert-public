@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { useQuery } from 'react-query'
-import { getStructureData } from '../services/structureApi'
-import BottomNav from '../components/BottomNav'
+import { getStructureData } from '../../services/structureApi'
+import BottomNav from '../../components/BottomNav'
 import { Box } from '@mui/material'
-import DataList from '../components/DataList'
-import BasicCard from '../components/Card'
+import DataList from '../../components/DataList'
+import BasicCard from '../../components/Card'
 
 import GppGoodIcon from '@mui/icons-material/GppGood'
 import GppBadIcon from '@mui/icons-material/GppBad'
@@ -16,8 +16,12 @@ import { useRouter } from 'next/router'
 function Structure() {
   const { query } = useRouter()
 
-  const { data, isLoading, isFetching } = useQuery('structure', () =>
-    getStructureData(query.structureId as string)
+  const { data, isLoading, isFetching } = useQuery(
+    'structure',
+    () => getStructureData(query.structureId as string, query.token as string),
+    {
+      enabled: !!query.structureId && !!query.token
+    }
   )
 
   const structureListData = useMemo(() => {
@@ -27,7 +31,7 @@ function Structure() {
         title: 'Red Seca',
         render: data.opcionRedSeca && (
           <Box display='flex' alignItems='center'>
-            {data.opcionRedSeca == 'No tiene' ? (
+            {data.opcionRedSeca == 'No posee' ? (
               <GppBadIcon color='error' />
             ) : (
               <GppGoodIcon color='success' />
@@ -40,7 +44,7 @@ function Structure() {
         title: 'Red Húmeda',
         render: data.opcionRedHumeda && (
           <Box display='flex' alignItems='center'>
-            {data.opcionRedHumeda == 'No tiene' ? (
+            {data.opcionRedHumeda == 'No posee' ? (
               <GppBadIcon color='error' />
             ) : (
               <GppGoodIcon color='success' />
@@ -53,7 +57,7 @@ function Structure() {
         title: 'Red Inerte',
         render: data.opcionRedInerte && (
           <Box display='flex' alignItems='center'>
-            {data.opcionRedInerte == 'No tiene' ? (
+            {data.opcionRedInerte == 'No posee' ? (
               <CancelIcon color='error' />
             ) : (
               <GppGoodIcon color='success' />
