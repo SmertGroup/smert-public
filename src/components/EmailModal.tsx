@@ -36,8 +36,14 @@ const EmailModal: FC<IModalProps> = ({ open, onClose, structureId }) => {
   const [email, setEmail] = useState('')
   const snackBar = useSnackbar()
 
-  const mutation = useMutation<IAuthBody>('authPublicUser', () =>
-    authPublicUser({ email, structureId })
+  const mutation = useMutation<IAuthBody>(
+    'authPublicUser',
+    () => authPublicUser({ email, structureId }),
+    {
+      onError: (error: any) => {
+        snackBar.showMessage(error.response.data.message)
+      }
+    }
   )
 
   const handleAuth = async () => {
@@ -73,7 +79,12 @@ const EmailModal: FC<IModalProps> = ({ open, onClose, structureId }) => {
             aria-describedby='my-helper-text'
             onChange={(e) => setEmail(e.target.value)}
           />
-          <Button onClick={handleAuth} variant='contained' sx={{ mt: 2 }}>
+          <Button
+            onClick={handleAuth}
+            disabled={mutation.isLoading}
+            variant='contained'
+            sx={{ mt: 2 }}
+          >
             Verificar
           </Button>
         </FormControl>
