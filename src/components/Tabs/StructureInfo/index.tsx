@@ -9,6 +9,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import CancelIcon from '@mui/icons-material/Cancel'
 
 const StructureInfo = ({ structure }: { structure: IStructureData }) => {
+  const floorsName = structure.settings.floor_plural || 'Plantas'
+
   const structureListData = useMemo(() => {
     if (!structure) return []
     return [
@@ -52,7 +54,7 @@ const StructureInfo = ({ structure }: { structure: IStructureData }) => {
         )
       },
       {
-        title: 'N° Plantas',
+        title: `N° ${floorsName}`,
         render: structure.numeroPisos && <Box>{structure.numeroPisos}</Box>
       },
       {
