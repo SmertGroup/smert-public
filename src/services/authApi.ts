@@ -2,7 +2,6 @@ import { api } from '../constants'
 import { IAuthBody } from '../interfaces'
 
 export const authPublicUser = async (body : IAuthBody) => {
-  try {
     const { data, status } = await api.post<IAuthBody>(
       '/auth',
       body,
@@ -14,9 +13,6 @@ export const authPublicUser = async (body : IAuthBody) => {
     )
 
     console.log('response status is: ', status)
-
+    
     return data
-  } catch (error) {
-    throw new Error('error')
-  }
 }

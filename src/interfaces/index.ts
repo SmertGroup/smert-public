@@ -16,11 +16,12 @@ export interface IStructureData {
   plantaGeneral: boolean;
   planoAscensor: boolean;
   piscina: boolean;
-  pisos: any[];
+  pisos: IFloor[];
   pisosAscensor:boolean;
-  opcionRedSeca: string,
-  opcionRedHumeda: string,
-  opcionRedInerte: string,
+  opcionRedSeca: string;
+  opcionRedHumeda: string;
+  opcionRedInerte: string;
+  settings: ISettings;
 }
 
 export interface IAuthBody {
@@ -30,4 +31,15 @@ export interface IAuthBody {
 
 interface ICommune {
   name: string;
+}
+
+interface IFloor {
+  id: number;
+  nombre: string;
+  alias: string;
+  plano: string;
+}
+interface ISettings {
+  floor_singular?: string;
+  floor_plural?: string;
 }

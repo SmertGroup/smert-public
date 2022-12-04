@@ -5,6 +5,7 @@ import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import Background from '../components/Background'
 import EmailModal from '../components/EmailModal'
 import { useRouter } from 'next/router'
+import Loading from '../components/Loading'
 
 export default function App() {
   const [visibleModal, setVisibleModal] = useState(false)
@@ -12,8 +13,9 @@ export default function App() {
   const closeHandlerModal = () => setVisibleModal(false)
 
   const { query } = useRouter()
+
   if (!query.structureId) {
-    return 'No autorizado'
+    return <Loading />
   }
 
   return (
@@ -32,18 +34,19 @@ export default function App() {
         gap={2}
         direction='column'
         justifyContent='center'
+        alignItems='center'
       >
         <Button
           variant='contained'
           onClick={handlerModal}
-          sx={{ p: 2, fontSize: 16 }}
+          sx={{ p: 2, fontSize: 16, width: 300 }}
         >
           Soy Bombero
         </Button>
         <Button
           variant='contained'
           href='https://smertgroup.com/'
-          sx={{ p: 2, fontSize: 16 }}
+          sx={{ p: 2, fontSize: 16, width: 300 }}
         >
           Conócenos
         </Button>

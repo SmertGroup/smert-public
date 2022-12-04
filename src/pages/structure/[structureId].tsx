@@ -1,113 +1,44 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import Grid from '@mui/material/Unstable_Grid2' // Grid version 2
 import { useQuery } from 'react-query'
 import { getStructureData } from '../../services/structureApi'
 import BottomNav from '../../components/BottomNav'
-import { Box } from '@mui/material'
-import DataList from '../../components/DataList'
-import BasicCard from '../../components/Card'
-
-import GppGoodIcon from '@mui/icons-material/GppGood'
-import GppBadIcon from '@mui/icons-material/GppBad'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import CancelIcon from '@mui/icons-material/Cancel'
 import { useRouter } from 'next/router'
+import { useSnackbar } from 'material-ui-snackbar-provider'
+import StructureInfo from '../../components/Tabs/StructureInfo'
+import Blueprints from '../../components/Tabs/Blueprints'
+import Contacts from '../../components/Tabs/Contacts'
+import Loading from '../../components/Loading'
 
 function Structure() {
-  const { query } = useRouter()
-
-  const { data, isLoading, isFetching } = useQuery(
+  const [tab, setTab] = React.useState(0)
+  const { query, replace } = useRouter()
+  const snackbar = useSnackbar()
+  const { data, isLoading, isFetching, error } = useQuery(
     'structure',
     () => getStructureData(query.structureId as string, query.token as string),
     {
-      enabled: !!query.structureId && !!query.token
+      enabled: !!query.structureId && !!query.token,
+      retry: false,
+      onError: (error: any) => {
+        if (error.response.status === 401 || error.response.status === 403) {
+          snackbar.showMessage('No autorizado')
+          replace(`/?structureId=${query.structureId}`)
+        }
+      }
     }
   )
 
-  const structureListData = useMemo(() => {
-    if (!data) return []
-    return [
-      {
-        title: 'Red Seca',
-        render: data.opcionRedSeca && (
-          <Box display='flex' alignItems='center'>
-            {data.opcionRedSeca == 'No posee' ? (
-              <GppBadIcon color='error' />
-            ) : (
-              <GppGoodIcon color='success' />
-            )}
-            {data.opcionRedSeca}
-          </Box>
-        )
-      },
-      {
-        title: 'Red Húmeda',
-        render: data.opcionRedHumeda && (
-          <Box display='flex' alignItems='center'>
-            {data.opcionRedHumeda == 'No posee' ? (
-              <GppBadIcon color='error' />
-            ) : (
-              <GppGoodIcon color='success' />
-            )}
-            {data.opcionRedHumeda}
-          </Box>
-        )
-      },
-      {
-        title: 'Red Inerte',
-        render: data.opcionRedInerte && (
-          <Box display='flex' alignItems='center'>
-            {data.opcionRedInerte == 'No posee' ? (
-              <CancelIcon color='error' />
-            ) : (
-              <GppGoodIcon color='success' />
-            )}
-            {data.opcionRedInerte}
-          </Box>
-        )
-      },
-      {
-        title: 'N° Plantas',
-        render: data.numeroPisos && <Box>{data.numeroPisos}</Box>
-      },
-      {
-        title: 'Piscina',
-        render: (
-          <Box>
-            {data.piscina ? (
-              <CheckCircleIcon color='success' />
-            ) : (
-              <CancelIcon color='error' />
-            )}
-          </Box>
-        )
-      },
-      {
-        title: 'Estacionamiento',
-        render: data.estacionamiento && (
-          <Box>
-            {data.estacionamiento ? (
-              <CancelIcon color='error' />
-            ) : (
-              <CheckCircleIcon color='success' />
-            )}
-          </Box>
-        )
-      },
-      {
-        title: 'Comentarios',
-        render: data.comentarios && (
-          <Box>{data.comentarios ? <p>{data.comentarios}</p> : '-'}</Box>
-        )
-      }
-    ]
-  }, [data])
+  if (error) return <div>No esta autorizado</div>
+
+  if (!data || isLoading || isFetching) return <Loading />
 
   return (
     <Grid direction='column' container m={4} gap={4}>
-      <BasicCard title='Titulo' description='Descripcion' />
-      {data && <DataList data={structureListData} />}
-      <BottomNav />
+      {tab === 0 && <StructureInfo structure={data} />}
+      {tab === 1 && <Blueprints structure={data} />}
+      {tab === 2 && <Contacts structure={data} />}
+      <BottomNav tab={tab} onChangeTab={setTab} />
     </Grid>
   )
 }

@@ -12,6 +12,7 @@ import {
 import { useMutation } from 'react-query'
 import { authPublicUser } from '../services/authApi'
 import { IAuthBody } from '../interfaces'
+import { useSnackbar } from 'material-ui-snackbar-provider'
 
 interface IModalProps {
   structureId: string
@@ -33,14 +34,25 @@ const style = {
 
 const EmailModal: FC<IModalProps> = ({ open, onClose, structureId }) => {
   const [email, setEmail] = useState('')
+  const snackBar = useSnackbar()
 
   const mutation = useMutation<IAuthBody>('authPublicUser', () =>
     authPublicUser({ email, structureId })
   )
 
   const handleAuth = async () => {
-    await mutation.mutateAsync()
-    alert('Se ha enviado un correo a su casilla')
+    if (
+      email
+        .toLocaleLowerCase()
+        .match(
+          "^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$"
+        )
+    ) {
+      await mutation.mutateAsync()
+      snackBar.showMessage('Se envio un email a tu casilla')
+    } else {
+      snackBar.showMessage('Email invalido')
+    }
   }
 
   return (
